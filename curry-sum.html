@@ -1,0 +1,65 @@
+<code>
+  <pre>
+function curry(func) {
+  const { length } = func
+  const _args = []
+  let res
+
+  function _func(...args) {
+    _args.push(...args)
+    if (_args.length >= length) {
+      _func.res = func.apply(null, _args.splice(0, length))
+    }
+
+    return _func
+  }
+
+  _func.toString = function() {
+    return _func.res
+  }
+
+  return _func
+}
+function sum(a, b, c) {
+  return a + b + c;
+}
+
+let curriedSum = curry(sum);
+
+alert(curriedSum(1, 2, 3)); // 6, still callable normally
+alert(curriedSum(1)(2, 3)); // 6, currying of 1st arg
+alert(curriedSum(1)(2)(3)); // 6, full currying
+  </pre>
+</code>
+
+<script>
+function curry(func) {
+  const { length } = func
+  const _args = []
+  let res
+
+  function _func(...args) {
+    _args.push(...args)
+    if (_args.length >= length) {
+      _func.res = func.apply(null, _args.splice(0, length))
+    }
+
+    return _func
+  }
+
+  _func.toString = function() {
+    return _func.res
+  }
+
+  return _func
+}
+function sum(a, b, c) {
+  return a + b + c;
+}
+
+let curriedSum = curry(sum);
+
+alert(curriedSum(1, 2, 3)); // 6, still callable normally
+alert(curriedSum(1)(2, 3)); // 6, currying of 1st arg
+alert(curriedSum(1)(2)(3)); // 6, full currying
+</script>
