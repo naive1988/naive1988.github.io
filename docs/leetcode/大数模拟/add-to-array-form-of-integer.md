@@ -1,5 +1,4 @@
-<code>
-  <pre>
+```js
 /**
  * @param {number[]} num
  * @param {number} k
@@ -29,5 +28,4 @@ var addToArrayForm = function(num, k) {
 
     return res
 };
-  </pre>
-</code>
+```

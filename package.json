@@ -1,0 +1,25 @@
+{
+  "name": "gh-page",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naive1988/naive1988.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/naive1988/naive1988.github.io/issues"
+  },
+  "dependencies": {
+    "vuepress": "^1.9.7"
+  },
+  "engines": {
+    "node": "12.14.1"
+  }
+}
