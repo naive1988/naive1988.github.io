@@ -1,0 +1,37 @@
+<code>
+  <pre>
+/**
+* @param {string} s
+* @param {character} c
+* @return {number[]}
+*/
+var shortestToChar = function(s, c) {
+    const { length } = s
+    const stones = []
+    for (let i = 0; i < length; i += 1) {
+        if (s[i] === c) {
+            stones.push(i)
+        }
+    }
+    const left = stones.slice(0)[0]
+    const right = stones.slice(-1)[0]
+
+    const res = []
+    let ptr = -1
+    for (let i = 0; i < length; i += 1) {
+        if (i < left) {
+            res.push(left - i)
+        } else if (i >= right) {
+            res.push(i - right)
+        } else if (s[i] === c) {
+            res.push(0)
+            ptr += 1
+        } else {
+            res.push(Math.min(i - stones[ptr], stones[ptr + 1] - i))
+        }
+    }
+
+    return res
+};
+  </pre>
+</code>

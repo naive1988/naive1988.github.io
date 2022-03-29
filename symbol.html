@@ -1,0 +1,133 @@
+<code>
+  <pre>
+// from https://zhuanlan.zhihu.com/p/27297604
+const GlobalSymbolRegistry = {}
+
+const INTERNAL = {
+  hasInstance: true,
+  isConcatSpreadable: true,
+  iterator: true,
+  match: true,
+  replace: true,
+  search: true,
+  species: true,
+  split: true,
+  toPrimitive: true,
+  toStringTag: true,
+  unscopables: true,
+}
+
+const generateName = (function () {
+  const created = {}
+
+  return function (description, internal) {
+    let postfix
+    if (INTERNAL[description]) {
+      postfix = ''
+      INTERNAL[description] = false
+    } else {
+      postfix = created[description] =  created[description] === undefined ?  1 : created[description] + 1
+    }
+    return `@@${ description || '' }${ postfix }`
+  }
+}())
+
+function d (mode, value) {
+  const map = {
+    c: 'configurable',
+    e: 'enumerable',
+    w: 'writable',
+  }
+
+  return mode
+    .split('')
+    .reduce((desc, m) => {
+      desc[map[m]] = true
+      return desc
+    }, {
+      value,
+      configurable: false,
+      enumerable: false,
+      writable: false,
+    })
+}
+
+function isSymbol (value) {
+  if (!value) return false
+  if (typeof value !== 'object') return false
+  if (!value.constructor) return false
+  if (value.constructor.name !== 'Symbol') return false
+  if (!value.__SymbolData__ || value.__SymbolData__ !== value) return false
+  if (value[value.constructor.toStringTag] !== 'Symbol') return false
+  return true
+}
+
+function validateSymbol (value) {
+  if (!isSymbol(value)) return new TypeError(value + 'is not a symbol')
+  return value
+}
+
+const {
+  defineProperty,
+  defineProperties
+} = Object
+
+const HiddenSymbol = function Symbol (description) {
+  if (this instanceof HiddenSymbol) throw new TypeError('Symbol is not a constructor')
+  return SymbolPolyfill(description)
+}
+
+const SymbolPolyfill= function Symbol (description) {
+  if (this instanceof SymbolPolyfill) throw new TypeError('Symbol is not a constructor')
+
+  let descString
+  description === undefined ? descString = undefined : descString = String(description)
+
+  let symbol = Object.create(HiddenSymbol.prototype)
+
+  defineProperties(symbol, {
+    __Description__: d('c', descString),
+    __Name__: d('c', generateName(descString)),
+    __SymbolData__: d('c', symbol),
+  })
+
+  return symbol
+}
+
+defineProperties(SymbolPolyfill, {
+  for: d('cw', function (key) {
+    key = String(key)
+    return GlobalSymbolRegistry[key] ? GlobalSymbolRegistry[key] : GlobalSymbolRegistry[key] = SymbolPolyfill(key)
+  }),
+  keyFor: d('cw', function (symbol) {
+    for (let key in globalSymbols) {
+      if (globalSymbols[key] === symbol) return key
+    }
+  }),
+  prototype: d('', SymbolPolyfill.prototype),
+})
+
+Object
+  .keys(INTERNAL)
+  .forEach(key => {
+    defineProperty(SymbolPolyfill, key, d('', SymbolPolyfill(key)))
+  })
+
+defineProperties(HiddenSymbol.prototype, {
+  constructor: d('cw', SymbolPolyfill),
+  toString: d('cw', function () { return this.__Name__; }),
+})
+
+defineProperties(SymbolPolyfill.prototype, {
+  toString: d('cw', function () { return `Symbol(${ validateSymbol(this).__Description__ || '' })` }),
+  valueOf: d('cw', function () { return validateSymbol(this).__SymbolData__ }),
+})
+
+defineProperty(SymbolPolyfill.prototype, SymbolPolyfill.toPrimitive, d('c', function () { return validateSymbol(this).__SymbolData__} ))
+defineProperty(SymbolPolyfill.prototype, SymbolPolyfill.toStringTag, d('c', 'Symbol'))
+
+defineProperty(HiddenSymbol.prototype, SymbolPolyfill.toPrimitive, d('c', SymbolPolyfill.prototype[SymbolPolyfill.toPrimitive]));
+defineProperty(HiddenSymbol.prototype, SymbolPolyfill.toStringTag, d('c', SymbolPolyfill.prototype[SymbolPolyfill.toStringTag]));
+
+  </pre>
+</code>
