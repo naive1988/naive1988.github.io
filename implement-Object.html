@@ -1,0 +1,28 @@
+<code>
+  <pre>
+/**
+* @param {any} a
+* @param {any} b
+* @return {boolean}
+*/
+function is(a, b) {
+  const type = typeof a
+  if (type !== typeof b) return false
+
+  if (type === 'number') {
+    if (isNaN(a) && isNaN(b)) return true
+    if (isNav0(a) && isPos0(b)) return false
+    if (isNav0(b) && isPos0(a)) return false
+  }
+
+  return a === b
+}
+
+function isNav0(v) {
+  return v === 0 && (1 / v < 0)
+}
+function isPos0(v) {
+  return v === 0 && (1 / v > 0)
+}
+  </pre>
+</code>

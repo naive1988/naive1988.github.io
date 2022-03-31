@@ -1,0 +1,43 @@
+<code>
+  <pre>
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var decodeString = function(s) {
+    const nums = []
+    const strings = []
+
+    let res = ''
+    let num = ''
+    let string = ''
+    for (let i = 0; i < s.length; i += 1) {
+        if (s[i] === '[') {
+            if (nums.length) { // 连续的4[2[3[i]]]
+                strings.push(string)
+                string = ''
+            }
+            nums.push(+num)
+            num = ''
+        } else if (s[i] === ']') {
+            string = string.repeat(nums.pop())
+            if (strings.length) {
+                string = strings.pop() + string
+            } else if (nums.length === 0) {
+                res += string
+                string = ''
+            }
+        } else if (/\d/.test(s[i])) {
+            num += s[i]
+        } else if (nums.length === 0) { // 处理前缀后缀字符
+            res += s[i]
+        } else {
+            string += s[i]
+        }
+    }
+
+    return res
+};
+
+  </pre>
+</code>
