@@ -1,0 +1,17 @@
+<code>
+  <pre>
+/**
+* @param {string} time
+* @returns {number}
+*/
+function angle(time) {
+  let [hh, mm] = time.split(':')
+  hh = (hh % 12 + mm / 60) * 360 / 12 // 要计算分针的偏移
+  mm = mm * 360 / 60
+
+  const _angle = Math.abs(hh - mm)
+
+  return Math.round(_angle > 180 ? 360 - _angle : _angle) // 取俩针夹角的小值
+}
+  </pre>
+</code>

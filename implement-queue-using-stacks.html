@@ -1,0 +1,46 @@
+<code>
+  <pre>
+class MyStack {
+  constructor() {
+    this.list = []
+  }
+  push(v) {
+    this.list.push(v)
+  }
+  pop() {
+    return this.list.pop()
+  }
+  peek() {
+    return this.list.slice(-1)[0]
+  }
+  empty() {
+    return this.list.length === 0
+  }
+}
+
+class MyQueue {
+  constructor() {
+    this.stack = new MyStack()
+  }
+  push(v) {
+    const _stack = new MyStack()
+    while (!this.stack.empty()) {
+      _stack.push(this.stack.pop())
+    }
+    _stack.push(v)
+    while (!_stack.empty()) {
+      this.stack.push(_stack.pop())
+    }
+  }
+  pop() {
+    return this.stack.pop()
+  }
+  peek() {
+    return this.stack.peek()
+  }
+  empty() {
+    return this.stack.empty()
+  }
+}
+  </pre>
+</code>
