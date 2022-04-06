@@ -1,0 +1,156 @@
+<code>
+  <pre>
+class MyURLSearchParams {
+  /**
+   * @params {string} init
+   */
+  constructor(init) {
+    this.list = []
+
+    init.slice(
+        init[0] === '?' ? 1 : 0
+      )
+      .split('&')
+      .forEach(kv => {
+        this.append(...kv.split('='))
+      })
+  }
+
+  /**
+   * @params {string} name
+   * @params {any} value
+   */
+  append(name, value) {
+    this.list.push([name, String(value)])
+  }
+
+  /**
+   * @params {string} name
+   */
+  delete(name, from = -1) {
+    for (let i = this.list.length - 1; i > from; i -=1) {
+      if (this.list[i][0] === name) {
+        this.list.splice(i, 1)
+      }
+    }
+  }
+
+  /**
+   * @returns {Iterator}
+   */
+  *entries() {
+    for (let i = 0; i < this.list.length; i += 1) {
+      yield this.list[i]
+    }
+  }
+
+  /**
+   * @param {(value, key) => void} callback
+   */
+  forEach(callback) {
+    this.list.forEach(([key, value]) => callback(value, key))
+  }
+
+  /**
+   * @param {string} name
+   * returns the first value of the name
+   */
+  get(name) {
+    const item = this.list.find(([k]) => k === name)
+
+    return item ? item[1] : null
+  }
+
+  /**
+   * @param {string} name
+   * @return {string[]}
+   * returns the value list of the name
+   */
+  getAll(name) {
+    return this.list.reduce(
+      (res, [k, v]) => k === name ? res.concat(v) : res,
+      []
+    )
+  }
+
+  /**
+   * @params {string} name
+   * @return {boolean}
+   */
+  has(name) {
+    return this.list.some(([k]) => k === name)
+  }
+
+  /**
+   * @return {Iterator}
+   */
+  keys() {
+    let idx = 0
+    const { list, list: { length } } = this
+
+    return {
+      [Symbol.iterator]() {
+        return {
+          next() {
+            return idx < length
+              ? { value: list[idx++][0], done: false }
+              : { value: undefined, done: true }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * @param {string} name
+   * @param {any} value
+   */
+  set(name, value) {
+    value = String(value)
+    const idx = this.list.findIndex(([k]) => k === name)
+    if (idx === -1) {
+      this.list.push([name, value])
+    } else {
+      this.list[idx][1] = value
+
+      this.delete(name, idx)
+    }
+  }
+
+  // sor all key/value pairs based on the keys
+  sort() {
+    this.list.sort(([k1], [k2]) => k1 > k2 ? 0 : -1)
+  }
+
+  /**
+   * @return {string}
+   */
+  toString() {
+    return this.list.reduce(
+      (res, [k, v]) => res + '&' + k + '=' + v,
+      ''
+    ).slice(1)
+  }
+
+  /**
+   * @return {Iterator} values
+   */
+  values() {
+    let idx = 0
+    const { list, list: { length } } = this
+
+    return {
+      [Symbol.iterator]() {
+        return {
+          next() {
+            return idx < length
+              ? { value: list[idx++][1], done: false }
+              : { value: undefined, done: true }
+          }
+        }
+      }
+    }
+  }
+}
+  </pre>
+</code>
