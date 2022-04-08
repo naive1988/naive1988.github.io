@@ -1,0 +1,46 @@
+<code>
+  <pre>
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var swapPairs = function(head) {
+    if (!head) return null
+    if (!head.next) return head
+
+    const odd = []
+    const even = []
+    let temp = head
+
+    while (temp) {
+        odd.push(temp)
+        if (!temp.next) break
+
+        even.push(temp.next)
+        temp = temp.next.next
+    }
+
+    temp = even.shift()
+    const res = temp
+
+    while (odd.length || even.length) {
+        if (odd.length) {
+            temp = temp.next = odd.shift()
+        }
+        if (even.length) {
+            temp = temp.next = even.shift()
+        }
+    }
+    temp.next = null
+
+    return res
+};
+  </pre>
+</code>

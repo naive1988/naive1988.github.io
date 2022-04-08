@@ -1,0 +1,16 @@
+<code>
+  <pre>
+/**
+* @param {any} proto
+* @return {object}
+*/
+function myObjectCreate(proto) {
+ if (proto === null || typeof proto !== 'object') throw new Error('params not a object')
+
+ function _() {}
+ _.prototype = proto
+
+ return new _()
+}
+  </pre>
+</code>
