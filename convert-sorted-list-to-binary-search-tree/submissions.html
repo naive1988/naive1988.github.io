@@ -1,0 +1,55 @@
+<code>
+  <pre>
+/**
+* Definition for singly-linked list.
+* function ListNode(val, next) {
+*     this.val = (val===undefined ? 0 : val)
+*     this.next = (next===undefined ? null : next)
+* }
+*/
+/**
+* Definition for a binary tree node.
+* function TreeNode(val, left, right) {
+*     this.val = (val===undefined ? 0 : val)
+*     this.left = (left===undefined ? null : left)
+*     this.right = (right===undefined ? null : right)
+* }
+*/
+/**
+* @param {ListNode} head
+* @return {TreeNode}
+*/
+var sortedListToBST = function(head) {
+    const nodes = []
+    let temp = head
+    while (temp) {
+        nodes.push(temp)
+        temp = temp.next
+    }
+
+    return _sortedListToBST(nodes)
+};
+
+/**
+* @param {Array<ListNode>} nodes
+* @return {TreeNode}
+*/
+var _sortedListToBST = function(nodes) {
+    if (nodes.length === 0) return null
+    if (nodes.length === 1) {
+        return new TreeNode(nodes[0].val, undefined, undefined)
+    }
+
+    const middle = Math.floor(nodes.length / 2)
+    const left = nodes.slice(0, middle)
+    const right = nodes.slice(middle + 1)
+    console.log(middle, nodes.length)
+
+    return new TreeNode(
+        nodes[middle].val,
+        left.length ? _sortedListToBST(left) : undefined,
+        right.length ? _sortedListToBST(right) : undefined,
+    )
+};
+  </pre>
+</code>

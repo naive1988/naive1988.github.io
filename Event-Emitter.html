@@ -1,0 +1,37 @@
+<code>
+  <pre>
+class EventEmitter {
+  constructor() {
+    this.map = {}
+    this.idMap = {}
+  }
+  subscribe(eventName, callback) {
+    const id = Date.now()
+    if (this.map[eventName]) {
+      this.map[eventName].push(callback)
+      this.idMap[eventName].push(id)
+    } else {
+      this.map[eventName] = [callback]
+      this.idMap[eventName] = [id]
+    }
+
+    return {
+      release: () => {
+        const idx = this.idMap[eventName].findIndex(v => v === id)
+        if (idx !== -1) {
+          this.map[eventName].splice(idx, 1)
+          this.idMap[eventName].splice(idx, 1)
+        }
+      }
+    }
+  }
+
+  emit(eventName, ...args) {
+    const cbs = this.map[eventName]
+    if (cbs) {
+      cbs.forEach(cb => cb(...args))
+    }
+  }
+}
+  </pre>
+</code>
