@@ -1,0 +1,45 @@
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  #box {
+    position: absolute;
+    left: calc(50% - 50px);
+    top: calc(50% - 50px);
+    width: 100px;
+    height: 100px;
+    border: 1px solid palegreen;
+    background-color: gray
+  }
+</style>
+
+<body>
+  <div id="box"></div>
+
+  <script>
+    box.addEventListener('mousedown', (e) => {
+      let { clientX: startX, clientY: startY } = e
+
+      function onMove(e) {
+        const { clientX, clientY } = e
+        const { top, left } = window.getComputedStyle(box)
+        box.style.cssText += `top: ${parseFloat(top) + (clientY - startY)}px;left: ${parseFloat(left) + (clientX - startX)}px;`
+        startX = clientX
+        startY = clientY
+      }
+
+      function onCancel(e) {
+        document.body.removeEventListener('mouseup', onCancel)
+        document.body.removeEventListener('mouseout', onCancel)
+        document.body.removeEventListener('mousemove', onMove)
+      }
+
+      document.body.addEventListener('mouseup', onCancel)
+      document.body.addEventListener('mouseout', onCancel)
+      document.body.addEventListener('mousemove', onMove)
+    })
+  </script>
+</body>
