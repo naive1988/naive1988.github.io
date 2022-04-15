@@ -1,0 +1,45 @@
+<code>
+  <pre>
+/**
+* @param {any} base
+* @param {(draft: any) => any} recipe
+* @returns {any}
+*/
+function produce(base, recipe) {
+  const curr = JSON.parse(JSON.stringify(base))
+  recipe(curr)
+
+  return isDeepEqual(base, curr) ? base : curr
+}
+
+function isDeepEqual(from, to) {
+  if (typeof from !== typeof to) return false
+  if (typeof from !== 'object') return from === to
+
+  let isEqual = true
+  const froms = Object.keys(from)
+  const tos = Object.keys(to)
+
+  // 被移除的属性
+  for (let key of froms) {
+    if (!tos.includes(key)) {
+      isEqual = false
+      break
+    }
+  }
+
+  // 比对现有属性
+  for (let key of tos) {
+    if (!froms.includes(key)) {
+      isEqual = false
+    } else if (isDeepEqual(from[key], to[key])) {
+      to[key] = from[key]
+    } else {
+      isEqual = false
+    }
+  }
+
+  return isEqual
+}
+  </pre>
+</code>
