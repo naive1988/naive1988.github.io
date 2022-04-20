@@ -1,0 +1,138 @@
+<code>
+  <pre>
+function LazyMan(name) {
+  return new _LazyMan(name)
+}
+
+class _LazyMan {
+  constructor(name) {
+    this.plan = null
+    this._todolist = []
+
+    return this._start(() => console.log(`Hi This is ${name}!`))
+  }
+
+  eat(meal) {
+    return this._start(() => console.log(`Eat ${meal}~`))
+  }
+
+  sleep(time) {
+    return this._start(
+      () => new Promise((resolve) => setTimeout(resolve, time * 1000))
+        .then(() => { console.log(`Wake up after ${time}`) })
+    )
+  }
+
+  sleepFirst(time) {
+    return this._start(
+      () => new Promise((resolve) => setTimeout(resolve, time * 1000))
+        .then(() => { console.log(`Wake up after ${time}`) }),
+      'unshift'
+    )
+  }
+
+  _start(todo, method = 'push') {
+    this._todolist[method](todo)
+
+    if (!this.plan) {
+      this.plan = setTimeout(() => {
+        this.plan = null
+        this._run(this._todolist.splice(0, this._todolist.length))
+      }, 0)
+    }
+
+    return this
+  }
+
+  _run(todolist) {
+    while (todolist.length) {
+      const result = todolist.shift()()
+      if (result instanceof Promise) {
+        result.then(() => {
+          this._run(todolist)
+        })
+        return
+      }
+    }
+  }
+}
+  </pre>
+</code>
+
+<script>
+function LazyMan(name) {
+  return new _LazyMan(name)
+}
+
+class _LazyMan {
+  constructor(name) {
+    this.plan = null
+    this._todolist = []
+
+    return this._start(() => console.log(`Hi This is ${name}!`))
+  }
+
+  eat(meal) {
+    return this._start(() => console.log(`Eat ${meal}~`))
+  }
+
+  sleep(time) {
+    return this._start(
+      () => new Promise((resolve) => setTimeout(resolve, time * 1000))
+        .then(() => { console.log(`Wake up after ${time}`) })
+    )
+  }
+
+  sleepFirst(time) {
+    return this._start(
+      () => new Promise((resolve) => setTimeout(resolve, time * 1000))
+        .then(() => { console.log(`Wake up after ${time}`) }),
+      'unshift'
+    )
+  }
+
+  _start(todo, method = 'push') {
+    this._todolist[method](todo)
+
+    if (!this.plan) {
+      this.plan = setTimeout(() => {
+        this.plan = null
+        this._run(this._todolist.splice(0, this._todolist.length))
+      }, 0)
+    }
+
+    return this
+  }
+
+  _run(todolist) {
+    while (todolist.length) {
+      const result = todolist.shift()()
+      if (result instanceof Promise) {
+        result.then(() => {
+          this._run(todolist)
+        })
+        return
+      }
+    }
+  }
+}
+
+// Hi! This is Hank!
+// LazyMan('Hank')
+
+// Hi! This is Hank!
+// 等待10秒..
+// Wake up after 10
+// Eat dinner~
+// LazyMan('Hank').sleep(10).eat('dinner')
+
+// Hi This is Hank!
+// Eat dinner~
+// Eat supper~
+// LazyMan('Hank').eat('dinner').eat('supper')
+
+// Wake up after 5
+// Hi This is Hank!
+// Eat supper
+// LazyMan('Hank').eat('supper').sleepFirst(5)
+</script>
