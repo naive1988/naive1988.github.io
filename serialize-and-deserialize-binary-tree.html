@@ -1,0 +1,80 @@
+<code>
+  <pre>
+/**
+* Definition for a binary tree node.
+* function TreeNode(val) {
+*     this.val = val;
+*     this.left = this.right = null;
+* }
+*/
+
+/**
+* Encodes a tree to a single string.
+*
+* @param {TreeNode} root
+* @return {string}
+*/
+var serialize = function(root) {
+    if (!root) return ''
+
+    const vals = []
+    let nodes = [root]
+    while (nodes.length) {
+        const _nodes = []
+        while (nodes.length) {
+            const node = nodes.shift()
+            if (node) {
+                vals.push(node.val)
+                _nodes.push(node.left, node.right)
+            } else {
+                vals.push('')
+            }
+        }
+        nodes = _nodes
+    }
+
+    return vals.join(',')
+};
+
+/**
+* Decodes your encoded data to tree.
+*
+* @param {string} data
+* @return {TreeNode}
+*/
+var deserialize = function(data) {
+    if (data === '') return null
+    const vals = data.split(',')
+    const res = new TreeNode(Number(vals.shift()))
+
+    let nodes = [res]
+    while (vals.length) {
+        let _nodes = []
+        while (nodes.length && vals.length) {
+            const node = nodes.shift()
+            if (vals.length) {
+                const val = vals.shift()
+                if (val !== '') {
+                    node.left = new TreeNode(Number(val))
+                    _nodes.push(node.left)
+                }
+            }
+            if (vals.length) {
+                const val = vals.shift()
+                if (val !== '') {
+                    node.right = new TreeNode(Number(val))
+                    _nodes.push(node.right)
+                }
+            }
+        }
+        nodes = _nodes
+    }
+    return res
+};
+
+/**
+* Your functions will be called as such:
+* deserialize(serialize(root));
+*/
+  </pre>
+</code>
