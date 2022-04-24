@@ -1,0 +1,19 @@
+<code>
+  <pre>
+/**
+* @param {number[]} nums
+* @param {number} target
+* @return {number[]}
+*/
+var twoSum = function(nums, target) {
+    const map = {}
+    for (let i = 0; i < nums.length; i += 1) {
+        const v = target - nums[i]
+        if (map[v] !== undefined) {
+            return [map[v], i]
+        }
+        map[nums[i]] = i
+    }
+};
+  </pre>
+</code>
