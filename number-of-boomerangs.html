@@ -1,0 +1,43 @@
+<code>
+  <pre>
+/**
+* @param {number[][]} points
+* @return {number}
+*/
+var numberOfBoomerangs = function(points) {
+    if (points.length < 3) return 0
+
+    const distanceMap = {}
+    function genKey(x, y) {
+        return x + '-' + y
+    }
+    function getDis([x1, y1], [x2, y2]) {
+        const key = genKey(x1, y1) + ':' + genKey(x2, y2)
+        if (distanceMap[key]) return distanceMap[key]
+        distanceMap[genKey(x2, y2) + ':' + genKey(x1, y1)] = distanceMap[key] = Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)
+        return distanceMap[key]
+    }
+
+    let res = 0
+    for (let i = 0; i < points.length; i += 1) {
+        const _map = {}
+        for (let j = 0; j < points.length; j += 1) {
+            if (i === j) continue
+               const dis = getDis(points[i], points[j])
+               if (_map[dis]) {
+                   _map[dis].push(genKey(...points[j]))
+               } else {
+                   _map[dis] = [genKey(...points[j])]
+               }
+           }
+
+           Object.keys(_map).forEach(key => {
+               if (_map[key].length > 1) {
+                   res += _map[key].length * (_map[key].length - 1)
+               }
+           })
+       }
+       return res
+   };
+  </pre>
+</code>
