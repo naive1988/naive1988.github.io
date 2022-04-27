@@ -1,0 +1,26 @@
+<code>
+  <pre>
+/**
+* @param {string} s
+* @return {number}
+*/
+var lengthOfLongestSubstring = function(s) {
+    let max = 0
+
+    const map = {}
+    let start = 0
+    for (let i = 0; i < s.length; i += 1) {
+        if (map[s[i]] === undefined) {
+            max = Math.max(i - start + 1, max)
+            map[s[i]] = i
+        } else {
+            start = Math.max(start, map[s[i]] + 1)
+            max = Math.max(i - start + 1, max)
+            map[s[i]] = i
+        }
+    }
+
+    return max
+};
+  </pre>
+</code>

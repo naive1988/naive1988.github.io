@@ -1,0 +1,62 @@
+<script>
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number[]}
+ */
+ var topKFrequent = function(nums, k) {
+    const sorted = []
+    const map = {}
+
+    function adjust(v) {
+        console.log('------', v, JSON.stringify(sorted))
+        if (sorted.length === 0) {
+            sorted.unshift(v)
+            return
+        }
+        if (map[v] <= map[sorted[sorted.length - 1]]) {
+            sorted.push(v)
+            return
+        }
+        if (map[v] >= map[sorted[0]]) {
+            sorted.unshift(v)
+            return
+        }
+        for (let i = sorted.length - 1; i > 0; i -= 1) {
+            if (map[v] <= map[sorted[i - 1]]) {
+                sorted.splice(i, 0, v)
+                return
+            }
+        }
+    }
+debugger
+    for (let i = 0; i < nums.length; i += 1) {
+        if (map[nums[i]]) {
+            map[nums[i]] += 1
+        } else {
+            map[nums[i]] = 1
+        }
+        console.log('--', nums[i], JSON.stringify(sorted))
+        const idx = sorted.findIndex(_v => _v === nums[i])
+        if (idx === -1) {
+            if (sorted.length < k) {
+                adjust(nums[i])
+            } else if (map[nums[i]] > map[sorted[k - 1]]) {
+                sorted.pop()
+                adjust(nums[i])
+            }
+        } else {
+            sorted.splice(idx, 1)
+            adjust(nums[i])
+        }
+        console.log(JSON.stringify(map), JSON.stringify(sorted))
+    }
+    return sorted.slice(0, k).map(value => value)
+};
+
+topKFrequent(
+  [5,3,1,1,1,3,5,73,1]
+,3
+)
+
+</script>
