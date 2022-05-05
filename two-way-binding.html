@@ -1,0 +1,28 @@
+<code>
+  <pre>
+/**
+* @param {{value: string}} state
+* @param {HTMLInputElement} element
+*/
+function model(state, element) {
+  let { value } = state
+  Object.defineProperty(
+    state,
+    'value',
+    {
+      get() { return value },
+      set(v) {
+        value = v
+        element.value = v
+      }
+    }
+  )
+
+  element.addEventListener('change', () => {
+    state.value = element.value
+  })
+
+  state.value = value
+}
+  </pre>
+</code>
