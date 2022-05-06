@@ -1,0 +1,24 @@
+<code>
+  <pre>
+/**
+* @param {number[]} nums
+* @return {number}
+*/
+var removeDuplicates = function(nums) {
+    const { length } = nums
+    if (length < 2) return length
+
+    let prev = nums[0]
+    let idx = 1
+    for (let i = 1; i < length; i += 1) {
+        if (prev !== nums[i]) {
+            nums[idx] = nums[i]
+            prev = nums[i]
+            idx += 1
+        }
+    }
+
+    return idx
+};
+  </pre>
+</code>

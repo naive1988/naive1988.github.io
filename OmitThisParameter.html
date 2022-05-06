@@ -1,0 +1,7 @@
+<code>
+  <pre>
+type MyOmitThisParameter<T> = T extends (...args: infer A) => infer B
+  ? (...args: A) => B
+  : never
+  </pre>
+</code>
