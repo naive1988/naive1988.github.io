@@ -1,0 +1,51 @@
+<code>
+  <pre>
+/**
+* @param {number[]} nums
+* @param {number} k
+* @return {number[]}
+*/
+var maxSlidingWindow = function(nums, k) {
+    if (k === 1) { return nums }
+    const res = []
+    const manager = new Manager()
+
+    for (let i = 0; i < k - 1; i += 1) {
+        manager.push(nums[i])
+    }
+    for (let i = k - 1; i < nums.length; i += 1) {
+        manager.push(nums[i])
+        res.push(manager.peek())
+        manager.shift(nums[i - k + 1])
+    }
+
+    return res
+};
+
+class Manager {
+    constructor() {
+        this.list = []
+    }
+    push(v) {
+        for (let i = this.list.length - 1; i >= 0; i -= 1) {
+            if (this.list[i] < v) {
+                this.list.splice(i, 1)
+            } else {
+                break
+            }
+        }
+        this.list.push(v)
+    }
+
+    shift(v) {
+        if (v === this.list[0]) {
+            this.list.shift()
+        }
+    }
+
+    peek() {
+        return this.list[0]
+    }
+}
+  </pre>
+</code>
