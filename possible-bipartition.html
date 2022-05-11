@@ -1,0 +1,43 @@
+<code>
+  <pre>
+/**
+* @param {number} n
+* @param {number[][]} dislikes
+* @return {boolean}
+*/
+var possibleBipartition = function(n, dislikes) {
+    const map = []
+    dislikes.forEach(([a, b]) => {
+        if (map[a]) {
+            map[a].push(b)
+        } else {
+            map[a] = [b]
+        }
+    })
+
+    let flagMap
+    function notMatch(i, flag) {
+        if (flagMap[i]) {
+            return flag !== flagMap[i]
+        }
+        flagMap[i] = flag
+        if (map[i]) {
+            flag *= -1
+            for (let j = map[i].length - 1; j >= 0; j -= 1) {
+                if (notMatch(map[i][j], flag)) {
+                    return true
+                }
+            }
+        }
+    }
+    for (let i = 1; i <= n; i += 1) {
+        flagMap = {}
+        if (notMatch(i, 1)) {
+            return false
+        }
+    }
+
+    return true
+};
+  </pre>
+</code>
