@@ -1,0 +1,22 @@
+<code>
+  <pre>
+/**
+* @param {string} moves
+* @return {boolean}
+*/
+var judgeCircle = function(moves) {
+    let count = {
+        U: 0,
+        D: 0,
+        L: 0,
+        R: 0
+    }
+
+    for (let i = 0; i < moves.length; i += 1) {
+        count[moves[i]] += 1
+    }
+
+    return count.U === count.D && count.L === count.R
+};
+  </pre>
+</code>
