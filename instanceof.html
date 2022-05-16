@@ -1,0 +1,13 @@
+<code>
+  <pre>
+function _instanceof(s, F) {
+  if(s.__proto__ === F.prototype) {
+    return true
+  } else if("__proto__" in F) {
+    return _instanceof(s, F.__proto__)
+  } else {
+    return false
+  }
+}
+  </pre>
+</code>
