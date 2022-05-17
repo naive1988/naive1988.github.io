@@ -1,0 +1,40 @@
+<code>
+  <pre>
+/**
+* @param {string} loginTime
+* @param {string} logoutTime
+* @return {number}
+*/
+var numberOfRounds = function(loginTime, logoutTime) {
+    loginTime = getTime(loginTime)
+    logoutTime = getTime(logoutTime)
+    console.log(loginTime, logoutTime)
+
+    if (logoutTime >= loginTime && logoutTime - loginTime < 15) {
+        return 0
+    }
+
+    loginTime = fixTime(loginTime, 'ceil')
+    logoutTime = fixTime(logoutTime, 'floor')
+    console.log(loginTime, logoutTime)
+
+    if (loginTime > logoutTime) {
+        const middle = fixTime(getTime('24:00'), 'floor')
+        console.log(middle)
+        return (middle - loginTime + logoutTime) / 15
+    }
+
+    return (logoutTime - loginTime) / 15
+};
+function getTime(t) {
+    const [h, m] = t.split(':')
+    return h * 60 + +m
+}
+function fixTime(t, method) {
+    const m = t % 60
+    const h = (t - m) / 60
+
+    return h * 60 + 15 * Math[method](m / 15)
+}
+  </pre>
+</code>
