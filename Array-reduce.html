@@ -1,0 +1,17 @@
+<code>
+  <pre>
+Array.prototype.reduce = function (cb, defaultValue) {
+  let start = 0
+  if (defaultValue === undefined) {
+    defaultValue= this[0]
+    start = 1
+  }
+
+  for (; start < this.length; start += 1) {
+    defaultValue = cb(defaultValue, this[start], start, this)
+  }
+
+  return defaultValue
+}
+  </pre>
+</code>
