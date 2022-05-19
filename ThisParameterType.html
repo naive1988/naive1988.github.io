@@ -1,0 +1,6 @@
+<code>
+  <pre>
+type MyThisParameterType<T extends () => unknown> =
+  T extends (this: infer K) => unknown ? K : never
+  </pre>
+</code>

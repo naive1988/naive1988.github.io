@@ -1,0 +1,44 @@
+<code>
+  <pre>
+/**
+* @param {number[]} nums
+* @return {number[]}
+*/
+var sortArray = function(nums) {
+    function sort(from, to) {
+        const middle = Math.floor((from + to) / 2)
+        console.log(from, middle, to)
+        if (from < middle || middle < to) {
+            sort(from, middle)
+            sort(middle + 1, to)
+
+            const _nums = []
+            let left = from
+            let right = middle + 1
+            while (left <= middle && right <= to) {
+                if (nums[left] <= nums[right]) {
+                    _nums.push(nums[left])
+                    left += 1
+                } else {
+                    _nums.push(nums[right])
+                    right += 1
+                }
+            }
+            while (left <= middle) {
+                _nums.push(nums[left])
+                left += 1
+            }
+            while (right <= to) {
+                _nums.push(nums[right])
+                right += 1
+            }
+            for (let i = from; i <= to; i += 1) {
+                nums[i] = _nums[i - from]
+            }
+        }
+    }
+    sort(0, nums.length - 1)
+    return nums
+};
+  </pre>
+</code>
