@@ -1,0 +1,26 @@
+<code>
+  <pre>
+/**
+* @param {number} x
+* @return {number}
+*/
+var mySqrt = function(x) {
+    if (x === 0 || x === 1) return x
+
+    let left = 1
+    let right = x
+
+    while (left < right) {
+        const middle = Math.floor((right + left) / 2)
+        const v = middle * middle
+        if (v === x) return middle
+        if (middle === left || middle === right) return left
+        if (v > x) {
+            right = middle
+        } else {
+            left = middle
+        }
+    }
+};
+  </pre>
+</code>

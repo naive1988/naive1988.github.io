@@ -1,0 +1,17 @@
+<code>
+  <pre>
+/**
+* @param {any[]} items
+* @param {number} size
+* @returns {any[][]}
+*/
+function chunk(items, size) {
+  if (size <= 0 || !items.length) return []
+  const res = []
+  while (items.length) {
+    res.push(items.splice(0, size))
+  }
+  return res
+}
+  </pre>
+</code>
