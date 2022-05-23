@@ -1,0 +1,37 @@
+<code>
+  <pre>
+function parseToMoney(num) {
+  let flag = ''
+  if (num < 0) {
+    num = -num
+    flag = '-'
+  }
+
+  let [v, c] = num.toExponential().split('e')
+  c = Number(c)
+
+  if (c === 0) {
+    return flag + v
+  }
+  if (c < 0) {
+    return flag + '0.' + '0'.repeat(-1 - c) + v.slice(0, 1) + v.slice(2)
+  }
+
+  let res = '.' + v.slice(2 + c)
+  if (res === '.') {
+    res = ''
+  }
+  num = v.slice(0, 1) + v.slice(2, 2 + c)
+  while (true) {
+    if (num.length <= 3) {
+      res = num + res
+      break
+    }
+    res = ',' + num.slice(-3) + res
+    num = num.slice(0, -3)
+  }
+
+  return flag + res
+}
+  </pre>
+</code>
