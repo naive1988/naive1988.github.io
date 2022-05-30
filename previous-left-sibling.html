@@ -1,0 +1,31 @@
+<code>
+  <pre>
+/**
+* @param {Element} root
+* @param {Element} target
+* @return {Elemnt | null}
+*/
+function previousLeftSibling(root, target) {
+  let nodes = [root]
+
+  while (nodes.length) {
+    const _nodes = []
+    while (nodes.length) {
+      const node = nodes.shift()
+      const children = node.children
+      if (children.length) {
+        for (let child of children) {
+          if (child === target) {
+            return _nodes.pop() || null
+          }
+          _nodes.push(child)
+        }
+      }
+    }
+    nodes = _nodes
+  }
+
+  return null
+}
+  </pre>
+</code>
