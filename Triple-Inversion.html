@@ -1,0 +1,62 @@
+<script>
+class Solution {
+    solve(nums) {
+        const { length } = nums
+        if (length < 2) return 0
+        let count = 0
+        mergeSort(0, length - 1)
+        return nums
+
+        function mergeSort(from, to) {
+            if (from === to) return
+            const middle = Math.floor((from + to) / 2)
+            if (from < middle || middle < to) {
+                mergeSort(from, middle)
+                mergeSort(middle + 1, to)
+
+                const _nums = []
+                let left = from
+                let right = middle + 1
+                while (left <= middle && right <= to) {
+                    if (nums[left] <= nums[right]) {
+                        _nums.push(nums[left])
+                        left += 1
+                    } else {
+                        if (nums[left] > nums[right] * 3) {
+                          count += (to - right + 1)
+                        }
+                        _nums.push(nums[right])
+                        right += 1
+                    }
+                }
+                let flag = true
+                while (left <= middle) {
+                    if (flag) {
+                      flag = false
+                    } else {
+                      if (nums[left] > nums[to] * 3) {
+                        count += (to - (middle + 1) + 1)
+                      }
+                    }
+                    _nums.push(nums[left])
+                    left += 1
+                }
+                while (right <= to) {
+                    if (nums[left] > nums[right] * 3) {
+                        count += right
+                    }
+                    _nums.push(nums[right])
+                    right += 1
+                }
+                console.log(from, middle, to)
+                console.log(JSON.stringify(_nums))
+                for (let i = _nums.length - 1; i >= 0; i -= 1) {
+                    nums[from + i] = _nums[i]
+                }
+            }
+        }
+    }
+}
+
+(new Solution).solve([2, 0, 2, 0])
+</script>

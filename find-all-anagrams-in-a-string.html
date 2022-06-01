@@ -1,0 +1,63 @@
+<code>
+  <pre>
+var findAnagrams = function(s, p) {
+  const { length } = s
+  if (s.length < p.length) return []
+
+  const manager = new Manager(p)
+
+  const res = []
+  let start = 0
+  for (let curr = 0; curr < length; curr += 1) {
+      if (manager.has(s[curr])) {
+          manager.record(s[curr])
+          if (curr - start === p.length - 1) {
+              if (manager.check()) {
+                  res.push(start)
+              }
+              manager.cancel(s[start])
+              start += 1
+          }
+      } else {
+          start = curr + 1
+          manager.reset()
+      }
+  }
+
+  return res
+};
+
+class Manager {
+  constructor(target) {
+      this.map = {}
+      this.list = []
+      this.currMap = {}
+
+      for (let i of target) {
+          if (this.map[i]) {
+              this.map[i] += 1
+          } else {
+              this.map[i] = 1
+              this.list.push(i)
+          }
+      }
+  }
+
+  has(i) {
+      return this.map[i]
+  }
+  record(i) {
+      this.currMap[i] = (this.currMap[i] || 0) + 1
+  }
+  cancel(i) {
+      this.currMap[i] -= 1
+  }
+  reset() {
+      this.currMap = {}
+  }
+  check() {
+      return this.list.every(i => this.map[i] === this.currMap[i])
+  }
+}
+  </pre>
+</code>
