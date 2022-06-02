@@ -1,0 +1,72 @@
+<code>
+  <pre>
+class Manager {
+  constructor(target) {
+      this.map = {}
+      this.list = []
+      this.tempMap = {}
+      this.tempCount = 0
+
+      for (let i of target) {
+          if (this.map[i]) {
+              this.map[i] += 1
+          } else {
+              this.map[i] = 1
+              this.list.push(i)
+          }
+      }
+  }
+  has(i) { return this.map[i] }
+  record(i) {
+      if (this.tempMap[i]) {
+          this.tempMap[i] += 1
+      } else {
+          this.tempMap[i] = 1
+          this.tempCount += 1
+      }
+  }
+  cancel(i) {
+      this.tempMap[i] -= 1
+      if (this.tempMap[i] === 0) {
+          this.tempCount -= 1
+      }
+  }
+  check() {
+      if (this.tempCount < this.list.length) return false
+      return this.list.every(i => this.tempMap[i] >= this.map[i])
+  }
+}
+
+
+/**
+* @param {string} s
+* @param {string} t
+* @return {string}
+*/
+var minWindow = function(s, t) {
+  let res = s + '-'
+
+  const manager = new Manager(t)
+  let left = 0
+  for (let i = 0; i < s.length; i += 1) {
+          if (!manager.has(s[i])) continue
+
+          manager.record(s[i])
+          while (manager.check()) {
+              while (!manager.has(s[left])) {
+                  left += 1
+              }
+
+              const curr = s.slice(left, i + 1)
+              if (res.length > curr.length) {
+                  res = curr
+              }
+              manager.cancel(s[left])
+              left += 1
+          }
+      }
+
+      return res.length > s.length ? '' : res
+  };
+  </pre>
+</code>
