@@ -52,6 +52,8 @@
   <div id="result"></div>
 
   <script>
+    var target = 24
+
     function check(id) {
       var v = document.querySelector('#' + id).value
       if (!v) {
@@ -67,14 +69,104 @@
       }
       return v
     }
+    function format(list, res) {
+      const map = { 11: 'J', 12: 'Q', 13: 'K' }
+      const count = { 11: 0, 12: 0, 13: 0 }
+      list.forEach(function(v) {
+        if (v > 10) {
+          count[v] += 1
+        }
+      })
 
-    function _calc(a, b, c, d) {
+      return res.map(function(v) {
+        return v.replace(/\d{2}/g, function(_v) {
+          if (_v > 10 && count[_v]) {
+            count[_v] -= 1
+            return map[_v]
+          }
+          return _v
+        })
+      }).join('\n')
+    }
 
+    function _calc(nums, res) {
+      nums = nums.sort((a, b) => b - a)
+
+      // 剩俩数了
+      if (nums.length === 2) {
+        if (nums[0] + nums[1] === target) {
+          res.push(`${nums[0]} 加上 ${nums[1]}, 得到 ${target}`)
+          return true
+        }
+        if (nums[0] - nums[1] === target) {
+          res.push(`${nums[0]} 减去 ${nums[1]}, 得到 ${target}`)
+          return true
+        }
+        if (nums[0] * nums[1] === target) {
+          res.push(`${nums[0]} 乘上 ${nums[1]}, 得到 ${target}`)
+          return true
+        }
+        if (nums[0] / nums[1] === target) {
+          res.push(`${nums[0]} 除以 ${nums[1]}, 得到 ${target}`)
+          return true
+        }
+
+        return false
+      }
+
+      for (let i = 0; i < nums.length - 1; i += 1) {
+        for (let j = i + 1; j < nums.length; j += 1) {
+          if (nums[i] % nums[j] === 0) {
+            res.push(`${nums[i]} 除以 ${nums[j]}, 得到 ${nums[i] / nums[j]}`)
+            if (_calc(
+              [...nums.slice(0, i), ...nums.slice(i + 1, j), ...nums.slice(j + 1), nums[i] / nums[j]],
+              res
+            )) {
+              return true
+            }
+            res.pop()
+          }
+        }
+      }
+
+      for (let i = 0; i < nums.length - 1; i += 1) {
+        for (let j = i + 1; j < nums.length; j += 1) {
+          // 加法
+          res.push(`${nums[i]} 加上 ${nums[j]}, 得到 ${nums[i] + nums[j]}`)
+          if (_calc(
+            [...nums.slice(0, i), ...nums.slice(i + 1, j), ...nums.slice(j + 1), nums[i] + nums[j]],
+            res
+          )) {
+            return true
+          }
+          res.pop()
+          // 减法
+          res.push(`${nums[i]} 减去 ${nums[j]}, 得到 ${nums[i] - nums[j]}`)
+          if (_calc(
+            [...nums.slice(0, i), ...nums.slice(i + 1, j), ...nums.slice(j + 1), nums[i] - nums[j]],
+            res
+          )) {
+            return true
+          }
+          res.pop()
+          // 乘法
+          res.push(`${nums[i]} 乘上 ${nums[j]}, 得到 ${nums[i] * nums[j]}`)
+          if (_calc(
+            [...nums.slice(0, i), ...nums.slice(i + 1, j), ...nums.slice(j + 1), nums[i] * nums[j]],
+            res
+          )) {
+            return true
+          }
+          res.pop()
+        }
+      }
+
+      return false
     }
 
     function calc() {
       var aa, bb, cc, dd
-      var res = document.querySelector('#result')
+      var resEle = document.querySelector('#result')
 
       try {
         aa = check('aa')
@@ -82,17 +174,16 @@
         cc = check('cc')
         dd = check('dd')
       } catch(e) {
-        res.innerText = e.message
+        resEle.innerText = e.message
         return
       }
 
-      var res = _calc(aa, bb, cc, dd)
+      var _res = []
+      var res = _calc([aa, bb, cc, dd], _res)
       if (!res) {
-        res.innerText = '不存在解法'
+        resEle.innerText = '不存在解法'
       } else {
-        res.innerText = res.replace(/\d{2}/g, function(e) {
-          return { 11: 'J', 12: 'Q', 13: 'K' }[e] || e
-        })
+        resEle.innerText = format([aa, bb, cc, dd], _res)
       }
     }
   </script>
