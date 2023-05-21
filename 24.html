@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>24点</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      padding: 10px;
+    }
+    .label {
+      display: block;
+      margin: 10px 0 0;
+    }
+    .label input {
+      border: 1px solid gray;
+      border-radius: 3px;
+      height: 28px;
+      padding: 0 5px;
+    }
+    .btn {
+      margin: 10px 0;
+      width: 120px;
+      height: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="tip">请输入4张牌，输入的值为1-10的整数，或者jqkJQK</div>
+  <label for="aa" class="label">
+    牌1：
+    <input type="text" id="aa">
+  </label>
+  <label for="bb" class="label">
+    牌2：
+    <input type="text" id="bb">
+  </label>
+  <label for="cc" class="label">
+    牌3：
+    <input type="text" id="cc">
+  </label>
+  <label for="dd" class="label">
+    牌4：
+    <input type="text" id="dd">
+  </label>
+  <button onclick="calc()" class="btn">calc</button>
+  <div id="result"></div>
+
+  <script>
+    function check(id) {
+      var v = document.querySelector('#' + id).value
+      if (!v) {
+        throw new Error('请输入四张牌')
+      }
+
+      var _v = { j: 11, q: 12, k: 13, J: 11, Q: 12, K: 13 }[v]
+      if (_v) return _v
+
+      v = Number(v)
+      if (v <= 0 || v > 10 || v % 1 !== 0) {
+        throw new Error('牌应该是1-10的整数，或者jqkJQK')
+      }
+      return v
+    }
+
+    function _calc(a, b, c, d) {
+
+    }
+
+    function calc() {
+      var aa, bb, cc, dd
+      var res = document.querySelector('#result')
+
+      try {
+        aa = check('aa')
+        bb = check('bb')
+        cc = check('cc')
+        dd = check('dd')
+      } catch(e) {
+        res.innerText = e.message
+        return
+      }
+
+      var res = _calc(aa, bb, cc, dd)
+      if (!res) {
+        res.innerText = '不存在解法'
+      } else {
+        res.innerText = res.replace(/\d{2}/g, function(e) {
+          return { 11: 'J', 12: 'Q', 13: 'K' }[e] || e
+        })
+      }
+    }
+  </script>
+</body>
+</html>
